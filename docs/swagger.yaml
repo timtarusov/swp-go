@@ -1,0 +1,11 @@
+basePath: /
+host: localhost:5000
+info:
+  contact:
+    email: ts.tarusov@stalcom.com
+    name: Timofey Tarusov
+  description: Модель расчета стратегического планирования персонала
+  title: SWP API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

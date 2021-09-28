@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ K8S_PROJECT_NAME }}-deployment
+  namespace: {{ K8S_NAMESPACE }}
+spec:
+  progressDeadlineSeconds: 720
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: {{ K8S_PROJECT_NAME }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ K8S_PROJECT_NAME }}
+    spec:
+      containers:
+      - name: {{ K8S_PROJECT_NAME }}
+        image: {{ K8S_REGISTRY }}/{{ K8S_GROUP_NAME }}/{{ K8S_PROJECT_NAME }}:{{ K8S_VERSION }}
+        imagePullPolicy: Always
+        env:
+        - name: API_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: apisecret
+              name: swpmodelcredentials
+        - name: HANA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: hanapassword
+              name: swpmodelcredentials
+        resources:
+          limits:
+            cpu: {{ K8S_CPU_LIM }}
+            memory: {{ K8S_MEM_LIM }}
+          requests:
+            cpu: {{ K8S_CPU_REQ }}
+            memory: {{ K8S_MEM_REQ }}
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+      imagePullSecrets:
+      - name: {{ K8S_CSD }}-registry
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        runAsUser: 10000
+        runAsGroup: 10000
+      terminationGracePeriodSeconds: 720

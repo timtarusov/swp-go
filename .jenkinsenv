@@ -1,0 +1,5 @@
+GROUP_NAME = 'ecommerce'
+PROJECT_NAME = 'swp-model'
+PROJECT_PATH = GROUP_NAME + '/' + PROJECT_NAME
+REGISTRY= 'docker.repo.severstal.severstalgroup.com'
+KUBECTL_VERSION = 'kubectl_1.17.2'
